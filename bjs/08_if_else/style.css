@@ -1,4 +1,42 @@
 .game-card {
     height: 100vh;
     font-family: 'Open Sans', monospace;
+
+    /* border: 10px outset lightblue;
+background-color: rgb(112, 223, 88);*/
+}
+
+.card {
+    border: 10px outset lightblue;
+    background-color: rgb(112, 223, 88);
+}
+
+.container {
+        background-image: url(turquoise_background.jpg);
+        min-height: 100hv;
+        min-width: 100hv;
+        background-size: cover;
+        display: grid;
+           }
+
+#blink {
+    color: rgb(245, 245, 245);
+    text-shadow: 0 -1px rgba(0, 0, 0, .1);
+    background: green;
+    -webkit-animation: pulsate 1.2s linear infinite;
+    animation: pulsate 1.2s linear infinite;
+}
+
+@-webkit-keyframes pulsate {
+    50% {
+        color: #fff;
+        text-shadow: 0 -1px rgba(0, 0, 0, .3), 0 0 5px #ffd, 0 0 8px #fff;
+    }
+}
+
+@keyframes pulsate {
+    50% {
+        color: #fff;
+        text-shadow: 0 -1px rgba(0, 0, 0, .3), 0 0 5px #ffd, 0 0 8px #fff;
+    }
 }

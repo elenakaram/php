@@ -4,11 +4,12 @@ let maxValue = parseInt(prompt('Максимальное знание числа
 /* Checking min and max values ebtered by user. Set minValue = -999 if it is less and also set maxValue = 999 if it is over */
 minValue = minValue < -999 ? minValue = -999 : minValue > 999 ? minValue = 999 : minValue;
 maxValue = maxValue > 999 ? maxValue = 999 : maxValue < -999 ? maxValue = -999 : maxValue;
+
 if (minValue > maxValue) {
     minValue = maxValue;
 }
 
-/* Validating dataa entered by user. If entered data are invalid, they are set to default min = -999 and max = 999 */
+/* Validating data entered by user. If entered data are invalid, they are set to default min = -999 and max = 999 */
 if ((isNaN(minValue)) || isNaN(maxValue) || minValue == '' || maxValue == '' || null) {
     minValue = -999;
     maxValue = 999;
@@ -32,7 +33,7 @@ answerField.innerText = `Вы загадали число ${answerNumber}?`;
 document.getElementById('btnRetry').addEventListener('click', function () {
     gameRun = true;
 
-    /* User enters min and max values for the search range */ 
+    /* User enters min and max values for the search range */
     minValue = parseInt(prompt('Минимальное знание числа для игры. Если мимнмальное значение не соотвествует условию, оно будет заменено на -999', '-999'));
     maxValue = parseInt(prompt('Максимальное знание числа для игры. Если максимальное значение не соотвествует условию, оно будет заменено на 999', '999'));
 
@@ -42,8 +43,8 @@ document.getElementById('btnRetry').addEventListener('click', function () {
     if (minValue > maxValue) {
         minValue = maxValue;
     }
-     
-    /* Validating dataa entered by user. If entered data are invalid, they are set to default min = -999 and max = 999 */
+
+    /* Validating data entered by user. If entered data are invalid, they are set to default min = -999 and max = 999 */
     if ((isNaN(minValue)) || isNaN(maxValue) || minValue == '' || maxValue == '' || null) {
         minValue = -999;
         maxValue = 999;
@@ -73,18 +74,18 @@ document.getElementById('btnOver').addEventListener('click', function () {
                     break;
                 case 3:
                     answerPhrase = `Какая то магия... Такого числа нет \n\u{1F645}`;
-                    break;
-                default:
-                    alert(`Для продолжения игры нажмите кнопку Заново`);
             }
             answerField.innerText = answerPhrase;
             gameRun = false;
         } else {
             minValue = answerNumber + 1;
+            console.log(minValue)
+            console.log(maxValue)
             answerNumber = Math.floor((minValue + maxValue) / 2);
+            console.log(answerNumber)
             orderNumber++;
             orderNumberField.innerText = orderNumber;
-            answerField.innerText = `Вы загадали число ${answerNumber}?`;
+            answerField.innerText = `Вы загадали число ${decomposeNumber(answerNumber)}?`;
         }
     }
 })
@@ -93,7 +94,8 @@ document.getElementById('btnOver').addEventListener('click', function () {
 document.getElementById('btnLess').addEventListener('click', function () {
     if (gameRun) {
         if (minValue === maxValue) {
-            const phraseRandom = Math.round(Math.random() * 3);
+            let phraseRandom = Math.round(Math.random() * 3);
+
             switch (phraseRandom) {
                 case 1:
                     answerPhrase = `Вы загадали неправильное число! \n\u{1F914}`;
@@ -103,18 +105,16 @@ document.getElementById('btnLess').addEventListener('click', function () {
                     break;
                 case 3:
                     answerPhrase = `Какая то магия... Такого числа нет \n\u{1F645}`;
-                    break;
-                default:
-                    alert(`Для продолжения игры нажмите кнопку Заново`);
             }
+
             answerField.innerText = answerPhrase;
             gameRun = false;
         } else {
-            maxValue = answerNumber + 1;
-            answerNumber = Math.floor((minValue + maxValue) / 2);
+            maxValue = answerNumber - 1;
+            answerNumber = Math.round((maxValue + minValue) / 2);
             orderNumber++;
             orderNumberField.innerText = orderNumber;
-            answerField.innerText = `Вы загадали число ${answerNumber}?`;
+            answerField.innerText = `Вы загадали число ${decomposeNumber(answerNumber)}?`
         }
     }
 })
@@ -125,16 +125,13 @@ document.getElementById('btnEqual').addEventListener('click', function () {
         const phraseRandom = Math.round(Math.random() * 3)
         switch (phraseRandom) {
             case 1:
-                answerPhrase = `${answerNumber} мое любимое число! Я всегда угадываю \n\u{1F60E}!`;
+                answerPhrase = `${decomposeNumber(answerNumber)} мое любимое число! Я всегда угадываю \n\u{1F60E}!`;
                 break;
             case 2:
-                answerPhrase = `Это только разминка, но число ${answerNumber} я уже угадал \n\u{1F61C}`;
+                answerPhrase = `Это только разминка, но число ${decomposeNumber(answerNumber)} я уже угадал \n\u{1F61C}`;
                 break;
             case 3:
-                answerPhrase = `Куда уж проще, это ${answerNumber} \n\u{1F607}`;
-                break;
-            default:
-                alert(`Для продолжения игры нажмите кнопку Заново`);
+                answerPhrase = `Куда уж проще, это ${decomposeNumber(answerNumber)} \n\u{1F607}`;
         }
         answerField.innerText = answerPhrase;
         gameRun = false;
@@ -142,3 +139,44 @@ document.getElementById('btnEqual').addEventListener('click', function () {
 })
 
 
+
+function decomposeNumber(num) {
+    let sign = num >= 0 ? "" : "минус";
+    let absNum = Math.abs(num);
+
+    let result = decomposeDigits(absNum);
+
+    let finalResult = sign + " " + result;
+
+    return finalResult.length < 20 ? finalResult : num;
+}
+
+
+function decomposeDigits(num) {
+    const ones = ['один', 'два', 'три', 'четыре', 'пять', 'шесть', 'семь', 'восемь', 'девять'];
+    const dozen = ['десять', 'одиннадцать', 'двенадцать', 'тринадцать', 'четырнадцать', 'пятнадцать', 'шестнадцать', 'семнадцать', 'восемьнадцать', 'девятнадцать'];
+    const dozens = ['двадцать', 'тридцать', 'сорок', 'пятьдесят', 'шестьдесят', 'семьдесят', 'восемьдесят', 'девяносто'];
+    const hunderds = ['сто', 'двести', 'триста', 'четыресто', 'пятьсот', 'шестьсот', 'семьсот', 'восемьсот', 'девятьсот'];
+    let hundredsIndex = Math.floor(num / 100);
+    let dozensIndex = Math.floor(num / 10) % 10;
+    let onesIndex = num % 10;
+
+    let result = "";
+
+    if (hundredsIndex > 0) {
+        result += hunderds[hundredsIndex - 1] + " ";
+    }
+    if (dozensIndex > 1) {
+        result += dozens[dozensIndex - 2] + " ";
+        if (onesIndex > 0) {
+            result += ones[onesIndex - 1];
+        }
+    } else if (dozensIndex === 1) {
+        result += dozen[onesIndex];
+    } else if (onesIndex > 0) {
+        result += ones[onesIndex - 1];
+    }
+
+    return result;
+
+}
